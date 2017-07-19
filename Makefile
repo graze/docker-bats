@@ -26,7 +26,7 @@ endif
 
 push: ## Push the images to the respository
 	docker push graze/bats:${ver}
-ifeq ({$ver},${latest})
+ifeq (${ver},${latest})
 	docker push graze/bats:latest
 endif
 

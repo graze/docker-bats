@@ -2,10 +2,10 @@
 
 setup() {
   if [ -z ${ver+x} ]; then
-    echo 'ver environment variable not set'
+    echo 'ver environment variable does not exist'
     exit 1
   fi
-  tag="${ver}"
+  tag=${ver}
 }
 
 @test "alpine version is correct" {
@@ -21,7 +21,7 @@ setup() {
   echo 'status:' $status
   echo 'output:' $output
   [ "$status" -eq 0 ]
-  [[ "$output" == "${ver}"* ]]
+  [[ "$output" == "Bats ${ver}"* ]]
   [[ "$output" != *"-dev"* ]]
   [[ "$output" != *"-alpha"* ]]
   [[ "$output" != *"-beta"* ]]

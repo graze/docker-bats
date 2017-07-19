@@ -14,7 +14,10 @@ build: ## Build a bats version
 	docker build ${cache} -t graze/bats:${ver} .
 
 test: ## Test the image
-	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $$(pwd):/app graze/bats
+	docker run --rm \
+		-v /var/run/docker.sock:/var/run/docker.sock -v $$(pwd):/app \
+		-e ver=${ver} \
+		graze/bats:${ver} .
 
 tag: ## Tag the image to latest if it is the latest
 ifeq (${ver},${latest})

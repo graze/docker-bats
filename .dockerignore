@@ -1,3 +1,5 @@
 .travis.yml
 Makefile
 test.bats
+README.md
+.git

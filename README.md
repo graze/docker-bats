@@ -4,14 +4,7 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/graze/bats.svg)](https://hub.docker.com/r/graze/bats/)
 [![Image Size](https://images.microbadger.com/badges/image/graze/bats.svg)](https://microbadger.com/images/graze/bats)
 
-This is a docker image containing [bats](https://github.com/sstephenson/bats) and a few other useful bits.
-
-## Useful bits
-
-1. [jq](https://stedolan.github.io/jq/) - JSON query on the commandline
-1. make - interacting with make commands
-1. curl - downloading remote sources
-1. docker - Running docker commands within the container
+This is a docker image containing [bats](https://github.com/sstephenson/bats) and a few other useful bits: [jq](https://stedolan.github.io/jq/), make, curl, docker, git
 
 ## Usage
 

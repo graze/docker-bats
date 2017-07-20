@@ -9,7 +9,7 @@ LABEL maintainer="developers@graze.com" \
     org.label-schema.name="bats" \
     org.label-schema.version="${VERSION}" \
     org.label-schema.description="alpine image for testing with bats" \
-    org.label-schema.vcs-url="https://github.com/graze/bats" \
+    org.label-schema.vcs-url="https://github.com/graze/docker-bats" \
     org.label-schema.docker.cmd="docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/app graze/bats"
 
 RUN apk add --no-cache --update bash curl docker make jq git && \

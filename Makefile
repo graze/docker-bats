@@ -11,7 +11,7 @@ build-quick: ## Build using caches
 
 build: cache ?=--pull --no-cache
 build: ## Build a bats version
-	docker build ${cache} -t graze/bats:${ver} .
+	docker build ${cache} ${build_args} -t graze/bats:${ver} .
 
 test: ## Test the image
 	docker run --rm \

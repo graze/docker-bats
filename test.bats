@@ -40,7 +40,6 @@ setup() {
   echo 'status:' $status
   echo 'output:' $output
   [ "$status" -eq 0 ]
-  [[ "${lines[0]}" == "Docker version"* ]]
 }
 
 @test "image has make installed" {
@@ -55,7 +54,6 @@ setup() {
   echo 'status:' $status
   echo 'output:' $output
   [ "$status" -eq 0 ]
-  [[ "${lines[0]}" == "curl"* ]]
 }
 
 @test "image has jq installed" {
@@ -73,7 +71,7 @@ setup() {
 }
 
 @test "the image has a MIT license" {
-  run bash -c "docker inspect graze/composer:$tag | jq -r '.[].Config.Labels.license'"
+  run bash -c "docker inspect graze/bats:$tag | jq -r '.[].Config.Labels.license'"
   echo 'status:' $status
   echo 'output:' $output
   [ "$status" -eq 0 ]
@@ -81,7 +79,7 @@ setup() {
 }
 
 @test "the image has a maintainer" {
-  run bash -c "docker inspect graze/composer:$tag | jq -r '.[].Config.Labels.maintainer'"
+  run bash -c "docker inspect graze/bats:$tag | jq -r '.[].Config.Labels.maintainer'"
   echo 'status:' $status
   echo 'output:' $output
   [ "$status" -eq 0 ]
@@ -89,7 +87,7 @@ setup() {
 }
 
 @test "the image uses label-schema.org" {
-  run bash -c "docker inspect graze/composer:$tag | jq -r '.[].Config.Labels.\"org.label-schema.schema-version\"'"
+  run bash -c "docker inspect graze/bats:$tag | jq -r '.[].Config.Labels.\"org.label-schema.schema-version\"'"
   echo 'status:' $status
   echo 'output:' $output
   [ "$status" -eq 0 ]
@@ -97,15 +95,15 @@ setup() {
 }
 
 @test "the image has a vcs-url label" {
-  run bash -c "docker inspect graze/composer:$tag | jq -r '.[].Config.Labels.\"org.label-schema.vcs-url\"'"
+  run bash -c "docker inspect graze/bats:$tag | jq -r '.[].Config.Labels.\"org.label-schema.vcs-url\"'"
   echo 'status:' $status
   echo 'output:' $output
   [ "$status" -eq 0 ]
-  [ "$output" = "https://github.com/graze/docker-composer" ]
+  [ "$output" = "https://github.com/graze/docker-bats" ]
 }
 
 @test "the image has a vcs-ref label set to the current head commit in github" {
-  run bash -c "docker inspect graze/composer:$tag | jq -r '.[].Config.Labels.\"org.label-schema.vcs-ref\"'"
+  run bash -c "docker inspect graze/bats:$tag | jq -r '.[].Config.Labels.\"org.label-schema.vcs-ref\"'"
   echo 'status:' $status
   echo 'output:' $output
   [ "$status" -eq 0 ]
@@ -113,7 +111,7 @@ setup() {
 }
 
 @test "the image has a build-date label" {
-  run bash -c "docker inspect graze/composer:$tag | jq -r '.[].Config.Labels.\"org.label-schema.build-date\"'"
+  run bash -c "docker inspect graze/bats:$tag | jq -r '.[].Config.Labels.\"org.label-schema.build-date\"'"
   echo 'status:' $status
   echo 'output:' $output
   [ "$status" -eq 0 ]
@@ -121,7 +119,7 @@ setup() {
 }
 
 @test "the image has a vendor label" {
-  run bash -c "docker inspect graze/composer:$tag | jq -r '.[].Config.Labels.\"org.label-schema.vendor\"'"
+  run bash -c "docker inspect graze/bats:$tag | jq -r '.[].Config.Labels.\"org.label-schema.vendor\"'"
   echo 'status:' $status
   echo 'output:' $output
   [ "$status" -eq 0 ]
@@ -129,25 +127,25 @@ setup() {
 }
 
 @test "the image has a name label" {
-  run bash -c "docker inspect graze/composer:$tag | jq -r '.[].Config.Labels.\"org.label-schema.name\"'"
+  run bash -c "docker inspect graze/bats:$tag | jq -r '.[].Config.Labels.\"org.label-schema.name\"'"
   echo 'status:' $status
   echo 'output:' $output
   [ "$status" -eq 0 ]
-  [ "$output" = "composer" ]
+  [ "$output" = "bats" ]
 }
 
 @test "the image has a version label" {
-  run bash -c "docker inspect graze/composer:$tag | jq -r '.[].Config.Labels.\"org.label-schema.version\"'"
+  run bash -c "docker inspect graze/bats:$tag | jq -r '.[].Config.Labels.\"org.label-schema.version\"'"
   echo 'status:' $status
   echo 'output:' $output
   [ "$status" -eq 0 ]
-  [ "$output" = "${COMPOSER_VER}-php${PHP_VER}" ]
+  [ "$output" = "$tag" ]
 }
 
 @test "the image has a docker.cmd label" {
-  run bash -c "docker inspect graze/composer:$tag | jq -r '.[].Config.Labels.\"org.label-schema.docker.cmd\"'"
+  run bash -c "docker inspect graze/bats:$tag | jq -r '.[].Config.Labels.\"org.label-schema.docker.cmd\"'"
   echo 'status:' $status
   echo 'output:' $output
   [ "$status" -eq 0 ]
-  [ "$output" = "docker run --rm -it -v \$(pwd):/usr/src/app -v ~/.composer:/home/composer/.composer -v ~/.ssh/id_rsa:/home/composer/.ssh/id_rsa:ro graze/composer:${COMPOSER_VER}-php${PHP_VER}" ]
+  [ "$output" = "docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v \$(pwd):/app graze/bats" ]
 }

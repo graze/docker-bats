@@ -36,7 +36,7 @@ setup() {
 }
 
 @test "image has docker installed" {
-  run docker run --rm --entrypoint="/bin/sh" graze/bats:$tag -c 'docker --version'
+  run docker run --rm --entrypoint="/bin/sh" graze/bats:$tag -c '[ -x /usr/bin/docker ]'
   echo 'status:' $status
   echo 'output:' $output
   [ "$status" -eq 0 ]
@@ -44,15 +44,14 @@ setup() {
 }
 
 @test "image has make installed" {
-  run docker run --rm --entrypoint="/bin/sh" graze/bats:$tag -c 'make --version'
+  run docker run --rm --entrypoint="/bin/sh" graze/bats:$tag -c '[ -x /usr/bin/make ]'
   echo 'status:' $status
   echo 'output:' $output
   [ "$status" -eq 0 ]
-  [[ "${lines[0]}" == "GNU Make"* ]]
 }
 
 @test "image has curl installed" {
-  run docker run --rm --entrypoint="/bin/sh" graze/bats:$tag -c 'curl --version'
+  run docker run --rm --entrypoint="/bin/sh" graze/bats:$tag -c '[ -x /usr/bin/curl ]'
   echo 'status:' $status
   echo 'output:' $output
   [ "$status" -eq 0 ]
@@ -60,17 +59,95 @@ setup() {
 }
 
 @test "image has jq installed" {
-  run docker run --rm --entrypoint="/bin/sh" graze/bats:$tag -c 'jq --version'
+  run docker run --rm --entrypoint="/bin/sh" graze/bats:$tag -c '[ -x /usr/bin/jq ]'
   echo 'status:' $status
   echo 'output:' $output
   [ "$status" -eq 0 ]
-  [[ "${lines[0]}" == "jq-"* ]]
 }
 
 @test "image has git installed" {
-  run docker run --rm --entrypoint="/bin/sh" graze/bats:$tag -c 'git --version'
+  run docker run --rm --entrypoint="/bin/sh" graze/bats:$tag -c '[ -x /usr/bin/git ]'
   echo 'status:' $status
   echo 'output:' $output
   [ "$status" -eq 0 ]
-  [[ "${lines[0]}" == "git version"* ]]
+}
+
+@test "the image has a MIT license" {
+  run bash -c "docker inspect graze/composer:$tag | jq -r '.[].Config.Labels.license'"
+  echo 'status:' $status
+  echo 'output:' $output
+  [ "$status" -eq 0 ]
+  [ "$output" = "MIT" ]
+}
+
+@test "the image has a maintainer" {
+  run bash -c "docker inspect graze/composer:$tag | jq -r '.[].Config.Labels.maintainer'"
+  echo 'status:' $status
+  echo 'output:' $output
+  [ "$status" -eq 0 ]
+  [ "$output" = "developers@graze.com" ]
+}
+
+@test "the image uses label-schema.org" {
+  run bash -c "docker inspect graze/composer:$tag | jq -r '.[].Config.Labels.\"org.label-schema.schema-version\"'"
+  echo 'status:' $status
+  echo 'output:' $output
+  [ "$status" -eq 0 ]
+  [ "$output" = "1.0" ]
+}
+
+@test "the image has a vcs-url label" {
+  run bash -c "docker inspect graze/composer:$tag | jq -r '.[].Config.Labels.\"org.label-schema.vcs-url\"'"
+  echo 'status:' $status
+  echo 'output:' $output
+  [ "$status" -eq 0 ]
+  [ "$output" = "https://github.com/graze/docker-composer" ]
+}
+
+@test "the image has a vcs-ref label set to the current head commit in github" {
+  run bash -c "docker inspect graze/composer:$tag | jq -r '.[].Config.Labels.\"org.label-schema.vcs-ref\"'"
+  echo 'status:' $status
+  echo 'output:' $output
+  [ "$status" -eq 0 ]
+  [ "$output" = `git rev-parse --short HEAD` ]
+}
+
+@test "the image has a build-date label" {
+  run bash -c "docker inspect graze/composer:$tag | jq -r '.[].Config.Labels.\"org.label-schema.build-date\"'"
+  echo 'status:' $status
+  echo 'output:' $output
+  [ "$status" -eq 0 ]
+  [ "$output" != "null" ]
+}
+
+@test "the image has a vendor label" {
+  run bash -c "docker inspect graze/composer:$tag | jq -r '.[].Config.Labels.\"org.label-schema.vendor\"'"
+  echo 'status:' $status
+  echo 'output:' $output
+  [ "$status" -eq 0 ]
+  [ "$output" = "graze" ]
+}
+
+@test "the image has a name label" {
+  run bash -c "docker inspect graze/composer:$tag | jq -r '.[].Config.Labels.\"org.label-schema.name\"'"
+  echo 'status:' $status
+  echo 'output:' $output
+  [ "$status" -eq 0 ]
+  [ "$output" = "composer" ]
+}
+
+@test "the image has a version label" {
+  run bash -c "docker inspect graze/composer:$tag | jq -r '.[].Config.Labels.\"org.label-schema.version\"'"
+  echo 'status:' $status
+  echo 'output:' $output
+  [ "$status" -eq 0 ]
+  [ "$output" = "${COMPOSER_VER}-php${PHP_VER}" ]
+}
+
+@test "the image has a docker.cmd label" {
+  run bash -c "docker inspect graze/composer:$tag | jq -r '.[].Config.Labels.\"org.label-schema.docker.cmd\"'"
+  echo 'status:' $status
+  echo 'output:' $output
+  [ "$status" -eq 0 ]
+  [ "$output" = "docker run --rm -it -v \$(pwd):/usr/src/app -v ~/.composer:/home/composer/.composer -v ~/.ssh/id_rsa:/home/composer/.ssh/id_rsa:ro graze/composer:${COMPOSER_VER}-php${PHP_VER}" ]
 }

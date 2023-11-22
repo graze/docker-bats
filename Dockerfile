@@ -1,6 +1,6 @@
-FROM alpine:3.6
+FROM alpine:3.18
 
-ARG VERSION=0.4.0
+ARG VERSION=1.10.0
 
 LABEL maintainer="developers@graze.com" \
     license="MIT" \
@@ -13,9 +13,9 @@ LABEL maintainer="developers@graze.com" \
     org.label-schema.docker.cmd="docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/app graze/bats"
 
 RUN apk add --no-cache --update bash curl docker make jq git && \
-      curl -o "/tmp/v${VERSION}.tar.gz" -L "https://github.com/sstephenson/bats/archive/v${VERSION}.tar.gz" && \
+      curl -o "/tmp/v${VERSION}.tar.gz" -L "https://github.com/bats-core/bats-core/archive/v${VERSION}.tar.gz" && \
       tar -x -z -f "/tmp/v${VERSION}.tar.gz" -C /tmp/ && \
-      bash "/tmp/bats-${VERSION}/install.sh" /usr/local && \
+      bash "/tmp/bats-core-${VERSION}/install.sh" /usr/local && \
       rm -rf /tmp/*
 
 VOLUME /app

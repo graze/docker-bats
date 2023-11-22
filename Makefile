@@ -1,8 +1,8 @@
 build_args := --build-arg BUILD_DATE=$(shell date -u +"%Y-%m-%dT%H:%M:%SZ") \
               --build-arg VCS_REF=$(shell git rev-parse --short HEAD)
 
-ver?=0.4.0
-latest:=0.4.0
+ver?=1.10.0
+latest:=1.10.0
 
 .PHONY: build build-quick test tag push deploy help
 

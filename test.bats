@@ -13,7 +13,7 @@ setup() {
   echo 'status:' $status
   echo 'output:' $output
   [ "$status" -eq 0 ]
-  [[ "${lines[2]}" == "VERSION_ID=3.6."* ]]
+  [[ "${lines[2]}" == "VERSION_ID=3.18."* ]]
 }
 
 @test "bats version is correct" {

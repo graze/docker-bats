@@ -1,6 +1,6 @@
-FROM alpine:3.18
+FROM alpine:3
 
-ARG VERSION=1.10.0
+ARG VERSION=1.11.0
 
 LABEL maintainer="developers@graze.com" \
     license="MIT" \
